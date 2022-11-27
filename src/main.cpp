@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "RenderWindow.hpp"
+#include "Entity.hpp"
 
 using namespace std;
 
@@ -19,7 +20,10 @@ int main(int argc, char* argv[])
 	RenderWindow window("GAME v1.0", 1280, 780);
 
 	// Load a grass texture
-	SDL_Texture* grassTexture = window.loadTexture("res/gfx/ground_grass_1.png");
+	SDL_Texture* grassTexture =
+		window.loadTexture("res/gfx/ground_grass_1.png");
+
+	Entity platform0(100, 50, grassTexture);
 
 	// Should the game stay open
 	bool  gameRunning = true;
@@ -42,7 +46,7 @@ int main(int argc, char* argv[])
 		window.clear();
 
 		// Renders the grass texture onto the window
-		window.render(grassTexture);
+		window.render(platform0);
 
 		// Displays the window onto screen
 		window.display();
