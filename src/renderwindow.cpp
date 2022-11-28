@@ -4,8 +4,7 @@
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
-
-using namespace std;
+#include "Math.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 	:window(NULL), renderer(NULL)
@@ -16,7 +15,8 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 
 	// Check whether window initialized
 	if(window == NULL)
-		cout << "Window failed to init. Error" << SDL_GetError() << endl;
+		std::cout << "Window failed to init. Error" << SDL_GetError() <<
+			std::endl;
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
@@ -27,9 +27,21 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 	texture = IMG_LoadTexture(renderer, p_filePath);
 
 	if(texture == NULL)
-		cout << "Failed to load texture. Error: " << SDL_GetError() << endl;
+		std::cout << "Failed to load texture. Error: " << SDL_GetError() <<
+			std::endl;
 
 	return texture;
+}
+
+int RenderWindow::getRefreshRate()
+{
+	int displayIndex = SDL_GetWindowDisplayIndex(window);
+
+	SDL_DisplayMode mode;
+
+	SDL_GetDisplayMode(displayIndex, 0, &mode);
+
+	return mode.refresh_rate;
 }
 
 void RenderWindow::cleanUp()
@@ -49,8 +61,8 @@ void RenderWindow::render(Entity& p_entity)
 
 	// Destination rect
 	SDL_Rect dst;
-	dst.x = p_entity.getX() * 4;
-	dst.y = p_entity.getY() * 4;
+	dst.x = p_entity.getPos().x * 4;
+	dst.y = p_entity.getPos().y * 4;
 	dst.w = src.w * 4;
 	dst.h = src.h * 4;
 
